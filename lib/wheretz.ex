@@ -1,18 +1,34 @@
 defmodule WhereTZ do
   @moduledoc """
-  Documentation for Wheretz.
+  **WhereTZ** is Elixir version of Ruby gem for lookup of timezone by georgraphic coordinates.
+
+  ## Example
+
+      iex(1)> WhereTZ.lookup(50.004444, 36.231389)  
+      "Europe/Kiev"
+
+      iex(2)> WhereTZ.get(50.004444, 36.231389)   
+      #<TimezoneInfo(Europe/Kiev - EET (+02:00:00))>
   """
   @basename "priv/data/"
 
   require Logger
 
-  # Time zone name by coordinates.
-  #
-  # @param lat Latitude (floating point number)
-  # @param lng Longitude (floating point number)
-  #
-  # @return {String, nil, Array<String>} time zone name, or `nil` if no time zone corresponds
-  #   to (lat, lng); in rare (yet existing) cases of ambiguous timezones may return an array of names
+  @doc """
+  Time zone name by coordinates.
+  
+    - lat Latitude (floating point number)
+    - lng Longitude (floating point number)
+  
+  @return {String, nil, Array<String>} time zone name, or `nil` if no time zone corresponds
+    to (lat, lng); in rare (yet existing) cases of ambiguous timezones may return an array of names
+
+  ## Example
+
+      iex(1)> WhereTZ.lookup(50.004444, 36.231389)  
+      "Europe/Kiev"
+  """
+  @spec lookup(-90..90, -180..180) :: Timex.TimezoneInfo.t() | nil
   def lookup(lat, lng) do
     candidates = Path.wildcard(@basename <> "*.geojson")
       |> Enum.map(&(Path.basename(&1)))
@@ -39,9 +55,17 @@ defmodule WhereTZ do
     end
   end
 
-  # Timex.TimezoneInfo bject by coordinates.
-  # @param lat Latitude (floating point number)
-  # @param lng Longitude (floating point number)
+  @doc """
+  Timex.TimezoneInfo object by coordinates.
+    - lat Latitude (floating point number)
+    - lng Longitude (floating point number)
+
+  ## Example
+
+      iex(1)> WhereTZ.get(50.004444, 36.231389)   
+      #<TimezoneInfo(Europe/Kiev - EET (+02:00:00))>
+  """
+  @spec get(-90..90, -180..180) :: String.t() | nil
   def get(lat, lng) do
     lookup(lat, lng)
       |> to_timezone()

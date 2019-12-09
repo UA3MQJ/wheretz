@@ -4,12 +4,23 @@ defmodule WhereTZ.MixProject do
   def project do
     [
       app: :wheretz,
+      description: "Time zone by geo coordinates lookup",
       version: "0.1.0",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [coveralls: :test, "coveralls.detail": :test, "coveralls.post": :test, "coveralls.html": :test],
       deps: deps(),
+      package: package(),
+      # Docs
+      name: "WhereTZ",
+      source_url: "https://github.com/UA3MQJ/wheretz",
+      homepage_url: "https://github.com/UA3MQJ/wheretz",
+      docs: [
+        main: "WhereTZ", # The main page in the docs
+        # logo: "path/to/logo.png",
+        extras: ["README.md"]
+      ]
     ]
   end
 
@@ -31,6 +42,15 @@ defmodule WhereTZ.MixProject do
       # {:gnuplot, git: "git@github.com:devstopfix/gnuplot-elixir.git"}, # for debug
       {:excoveralls, "~> 0.12.1"},
       {:inch_ex, github: "rrrene/inch_ex", only: [:dev, :test]},
+      {:ex_doc, "~> 0.21", only: :dev, runtime: false},
     ]
   end
+
+  defp package do
+    [
+      maintainers: [" Alexey Bolshakov "],
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/UA3MQJ/wheretz"}
+    ]
+end
 end

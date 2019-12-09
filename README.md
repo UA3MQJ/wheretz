@@ -15,12 +15,22 @@ Features:
 
 ## Usage
 
-Add to project
+Add to project from hex.pm
 
 ```elixir
 def deps do
   [
-    {:wheretz, "~> 0.1.0"}
+    {:wheretz, "~> 0.1.0"},
+  ]
+end
+```
+
+or from github
+
+```elixir
+def deps do
+  [
+    {:wheretz, git: "git@github.com:UA3MQJ/wheretz.git", tag: "v0.1.0"},
   ]
 end
 ```
@@ -54,6 +64,7 @@ iex(2)> WhereTZ.lookup(50.004444, 36.231389)
 
 # Рецепты
 
+```elixir
 Moscow
 WhereTZ.lookup(55.75, 37.616667) 
 
@@ -101,6 +112,6 @@ File.close(file)
 
 data1 = Jason.decode!(json1) |> Geo.JSON.decode!()
 data2 = Jason.decode!(json2) |> Geo.JSON.decode!()
-
+```
 
 
