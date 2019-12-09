@@ -1,4 +1,8 @@
 # WhereTZ: timezone lookup
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Build Status](https://travis-ci.org/UA3MQJ/wheretz.svg?branch=master)](https://travis-ci.org/UA3MQJ/wheretz?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/UA3MQJ/wheretz/badge.svg?branch=master)](https://coveralls.io/github/UA3MQJ/wheretz?branch=master)
+[![Inline docs](http://inch-ci.org/github/UA3MQJ/wheretz.svg)](http://inch-ci.org/github/UA3MQJ/wheretz)
 
 **WhereTZ** is elixir version of Ruby gem for lookup of timezone by georgraphic coordinates.
 
