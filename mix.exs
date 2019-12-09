@@ -7,6 +7,7 @@ defmodule WhereTZ.MixProject do
       version: "0.1.0",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
+      test_coverage: [tool: ExCoveralls],
       deps: deps()
     ]
   end
@@ -27,6 +28,7 @@ defmodule WhereTZ.MixProject do
       # {:topo, path: "../topo"}, # for debug
       {:topo, "~> 0.4.0"},
       # {:gnuplot, git: "git@github.com:devstopfix/gnuplot-elixir.git"}, # for debug
+      {:excoveralls, "~> 0.12.1"},
     ]
   end
 end
