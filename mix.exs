@@ -8,7 +8,8 @@ defmodule WhereTZ.MixProject do
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
       test_coverage: [tool: ExCoveralls],
-      deps: deps()
+      preferred_cli_env: [coveralls: :test, "coveralls.detail": :test, "coveralls.post": :test, "coveralls.html": :test],
+      deps: deps(),
     ]
   end
 
@@ -29,7 +30,7 @@ defmodule WhereTZ.MixProject do
       {:topo, "~> 0.4.0"},
       # {:gnuplot, git: "git@github.com:devstopfix/gnuplot-elixir.git"}, # for debug
       {:excoveralls, "~> 0.12.1"},
-      {:inch_ex, only: :docs},
+      {:inch_ex, github: "rrrene/inch_ex", only: [:dev, :test]},
     ]
   end
 end
