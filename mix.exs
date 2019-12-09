@@ -1,4 +1,4 @@
-defmodule Wheretz.MixProject do
+defmodule WhereTZ.MixProject do
   use Mix.Project
 
   def project do
@@ -22,7 +22,7 @@ defmodule Wheretz.MixProject do
   defp deps do
     [
       {:poison, "~> 4.0"},
-      {:timex, "~> 3.6.1"},
+      {:timex, "~> 3.6"},
       {:geo, "~> 3.3"},
       # {:topo, path: "../topo"}, # for debug
       {:topo, "~> 0.4.0"},
