@@ -42,7 +42,7 @@ defmodule WhereTZ.MixProject do
       {:topo, "~> 0.4.0"},
       # {:gnuplot, git: "git@github.com:devstopfix/gnuplot-elixir.git"}, # for debug
       {:excoveralls, "~> 0.12.1", only: :test},
-      {:inch_ex, "~> 2.0"},
+      {:inch_ex, "~> 2.0", only: docs},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false},
     ]
   end

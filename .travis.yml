@@ -9,7 +9,13 @@ otp_release:
 env:
   - MIX_ENV=test
 
-script: mix coveralls.travis
+script:
+  - mix test
+  - mix coveralls.travis
+
+before_script:
+  - mix local.hex --force
+  - mix deps.get --only test
 
 after_script:
     - MIX_ENV=docs mix deps.get

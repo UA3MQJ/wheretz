@@ -5,11 +5,13 @@ defmodule Mix.Tasks.ZipData do
   @shortdoc "Zip geojson files"
   def run(_) do
     Logger.debug @shortdoc
-    path = "./priv/data/"
-    files = File.ls!(path)
-    |> Enum.map(fn filename -> Path.join(path, filename) end)
-    |> Enum.map(&String.to_charlist/1)
 
-    :zip.create('data.zip', files)
+    files = Path.wildcard("./priv/data/*.geojson")
+      |> Enum.map(&String.to_charlist/1)
+
+    :zip.create('./priv/data.zip', files)
+
+    files
+      |> Enum.map(&File.rm!/1)
   end
 end
