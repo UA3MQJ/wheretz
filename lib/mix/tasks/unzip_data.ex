@@ -4,6 +4,8 @@ defmodule Mix.Tasks.UnzipData do
 
   @shortdoc "Unzip geojson files"
   def run(_) do
-      Logger.debug @shortdoc
+    Logger.debug @shortdoc
+
+    :zip.extract('./priv/data.zip')
   end
 end
