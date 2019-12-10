@@ -1,0 +1,6 @@
+{
+    "skip_files": [
+      "lib/mix/tasks/unzip_data.ex",
+      "lib/mix/tasks/zip_data.ex"
+    ]
+  }
