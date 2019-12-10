@@ -28,7 +28,7 @@ defmodule WhereTZ do
       iex(1)> WhereTZ.lookup(50.004444, 36.231389)  
       "Europe/Kiev"
   """
-  @spec lookup(-90..90, -180..180) :: Timex.TimezoneInfo.t() | nil
+  @spec lookup(-90..90, -180..180) :: String.t() | nil
   def lookup(lat, lng) do
     candidates = Path.wildcard(@basename <> "*.geojson")
       |> Enum.map(&(Path.basename(&1)))
@@ -60,12 +60,14 @@ defmodule WhereTZ do
     - lat Latitude (floating point number)
     - lng Longitude (floating point number)
 
+  @return Timex.TimezoneInfo
+
   ## Example
 
       iex(1)> WhereTZ.get(50.004444, 36.231389)   
       #<TimezoneInfo(Europe/Kiev - EET (+02:00:00))>
   """
-  @spec get(-90..90, -180..180) :: String.t() | nil
+  @spec get(-90..90, -180..180) :: Timex.TimezoneInfo.t() | nil
   def get(lat, lng) do
     lookup(lat, lng)
       |> to_timezone()
