@@ -12,6 +12,7 @@ defmodule WhereTZ.MixProject do
       preferred_cli_env: [coveralls: :test, "coveralls.detail": :test, "coveralls.post": :test, "coveralls.html": :test],
       deps: deps(),
       package: package(),
+      aliases: aliases(),
       # Docs
       name: "WhereTZ",
       source_url: "https://github.com/UA3MQJ/wheretz",
@@ -40,9 +41,16 @@ defmodule WhereTZ.MixProject do
       # {:topo, path: "../topo"}, # for debug
       {:topo, "~> 0.4.0"},
       # {:gnuplot, git: "git@github.com:devstopfix/gnuplot-elixir.git"}, # for debug
-      {:excoveralls, "~> 0.12.1"},
-      {:inch_ex, github: "rrrene/inch_ex", only: [:dev, :test]},
+      {:excoveralls, "~> 0.12.1", only: :test},
+      {:inch_ex, github: "rrrene/inch_ex", only: :test},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false},
+    ]
+  end
+
+  defp aliases do
+    [
+      compile: ["unzip_data", "compile"],
+      test: ["unzip_data", "test"]
     ]
   end
 
@@ -52,5 +60,5 @@ defmodule WhereTZ.MixProject do
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/UA3MQJ/wheretz"}
     ]
-end
+  end
 end
