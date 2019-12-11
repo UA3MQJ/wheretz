@@ -15,18 +15,19 @@ defmodule Mix.Tasks.DownloadData do
 
   def download_database() do
     Application.ensure_all_started :httpoison
+    File.mkdir("./priv")
     link = "http://github.com/evansiroky/timezone-boundary-builder/releases/download/2019b/timezones-with-oceans.geojson.zip"
 
     Logger.info "Download #{inspect link} ..."
     %HTTPoison.Response{body: body} = HTTPoison.get!(link, [], [follow_redirect: true])
     Logger.info "Save to file"
-    File.write!("priv/data/timezones-with-oceans.geojson.zip", body)
+    File.write!("./priv/data/timezones-with-oceans.geojson.zip", body)
 
     Logger.info "Unzip ..."
-    :zip.unzip('priv/data/timezones-with-oceans.geojson.zip',  [{:cwd, 'priv/data/'}])
+    :zip.unzip('./priv/data/timezones-with-oceans.geojson.zip',  [{:cwd, './priv/data/'}])
 
     Logger.info "Read json ..."
-    {:ok, file} = File.open("priv/data/dist/combined-with-oceans.json", [:read])
+    {:ok, file} = File.open("./priv/data/dist/combined-with-oceans.json", [:read])
     json = IO.binread(file, :all)
     File.close(file)
 
