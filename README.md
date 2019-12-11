@@ -21,7 +21,7 @@ Add to project from hex.pm
 ```elixir
 def deps do
   [
-    {:wheretz, "~> 0.1.0"},
+    {:wheretz, "~> 0.1.1"},
   ]
 end
 ```
@@ -31,7 +31,7 @@ or from github
 ```elixir
 def deps do
   [
-    {:wheretz, git: "git@github.com:UA3MQJ/wheretz.git", tag: "v0.1.0"},
+    {:wheretz, git: "git@github.com:UA3MQJ/wheretz.git", tag: "v0.1.1"},
   ]
 end
 ```
