@@ -16,6 +16,7 @@ defmodule Mix.Tasks.DownloadData do
   def download_database() do
     Application.ensure_all_started :httpoison
     File.mkdir("./priv")
+    File.mkdir("./priv/data")
     link = "http://github.com/evansiroky/timezone-boundary-builder/releases/download/2019b/timezones-with-oceans.geojson.zip"
 
     Logger.info "Download #{inspect link} ..."
