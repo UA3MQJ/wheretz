@@ -14,23 +14,26 @@ defmodule Mix.Tasks.DownloadData do
   end
 
   def download_database() do
-    :ssl.start() 
-    :inets.start()
-    
-    link = 'http://github.com/evansiroky/timezone-boundary-builder/releases/download/2019b/timezones-with-oceans.geojson.zip'
-    Logger.info "Download #{inspect link}"
-    {:ok, :saved_to_file} = :httpc.request(:get, {link, []}, [], [stream: 'priv/data/timezones-with-oceans.geojson.zip'])
-    Logger.info "Unzip"
+    Application.ensure_all_started :httpoison
+    link = "http://github.com/evansiroky/timezone-boundary-builder/releases/download/2019b/timezones-with-oceans.geojson.zip"
+
+    Logger.info "Download #{inspect link} ..."
+    %HTTPoison.Response{body: body} = HTTPoison.get!(link, [], [follow_redirect: true])
+    Logger.info "Save to file"
+    File.write!("priv/data/timezones-with-oceans.geojson.zip", body)
+
+    Logger.info "Unzip ..."
     :zip.unzip('priv/data/timezones-with-oceans.geojson.zip',  [{:cwd, 'priv/data/'}])
 
+    Logger.info "Read json ..."
     {:ok, file} = File.open("priv/data/dist/combined-with-oceans.json", [:read])
     json = IO.binread(file, :all)
     File.close(file)
-    Logger.info "Readed json"
 
+    Logger.info "Decode json ..."
     data = Jason.decode!(json)
-    Logger.info "Decoded json"
 
+    Logger.info "Parse and insert ..."
     data["features"]
       |> Enum.map(&parse_item/1)
       |> Enum.map(&insert_item/1)
