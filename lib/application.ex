@@ -19,7 +19,7 @@ defmodule WhereTZ.Application do
         throw(:database_is_empty)
     end
 
-    :mnesia.wait_for_tables([:geo], 10_000)
+    :mnesia.wait_for_tables([:geo], 60_000)
     Logger.info "WhereTZ Mnesia started"
 
     # List all child processes to be supervised
