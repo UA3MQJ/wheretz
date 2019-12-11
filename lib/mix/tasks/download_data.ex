@@ -17,8 +17,7 @@ defmodule Mix.Tasks.DownloadData do
     :ssl.start() 
     :inets.start()
     
-
-    link = 'https://github.com/evansiroky/timezone-boundary-builder/releases/download/2019b/timezones-with-oceans.geojson.zip'
+    link = 'http://github.com/evansiroky/timezone-boundary-builder/releases/download/2019b/timezones-with-oceans.geojson.zip'
     Logger.info "Download #{inspect link}"
     {:ok, :saved_to_file} = :httpc.request(:get, {link, []}, [], [stream: 'priv/data/timezones-with-oceans.geojson.zip'])
     Logger.info "Unzip"
