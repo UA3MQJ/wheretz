@@ -10,7 +10,6 @@ defmodule WhereTZ do
       iex(2)> WhereTZ.get(50.004444, 36.231389)   
       #<TimezoneInfo(Europe/Kiev - EET (+02:00:00))>
   """
-  @basename "priv/data/"
 
   require Logger
 
@@ -30,25 +29,25 @@ defmodule WhereTZ do
   """
   @spec lookup(-90..90, -180..180) :: String.t() | nil
   def lookup(lat, lng) do
-    candidates = Path.wildcard(@basename <> "*.geojson")
-      |> Enum.map(&(Path.basename(&1)))
-      |> Enum.map(fn(base_name) ->
-        name = hd(String.split(base_name, ".geojson"))
-        [zone | coords] = String.split(name, "__")
-        zone = zone |> String.split("-") |> Enum.join("/")
-        [minx, maxx, miny, maxy] = Enum.map(coords, &(String.to_float(&1)))
-        {base_name, zone, minx, maxx, miny, maxy}
-      end)
-      |> Enum.filter(fn({_base_name, _zone, minx, maxx, miny, maxy}) ->
-        lat >= miny and lat <= maxy and lng >= minx and lng <= maxx
-      end)
+    # where = :ets.fun2ms(fn({:geo, zone_name, minx, maxx, miny, maxy, geo_object}) when lng>=minx and lng<=maxx and lat>=miny and lat<=maxy -> {zone_name, geo_object} end)
+    where = [
+      {{:geo, :"$1", :"$2", :"$3", :"$4", :"$5", :"$6"},
+       [
+         {:andalso,
+          {:andalso,
+           {:andalso, {:>=, {:const, lng}, :"$2"},
+            {:"=<", {:const, lng}, :"$3"}},
+           {:>=, {:const, lat}, :"$4"}}, {:"=<", {:const, lat}, :"$5"}}
+       ], [{{:"$1", :"$6"}}]}
+    ]
+    {:atomic, candidates} = :mnesia.transaction(fn() -> :mnesia.select(:geo, where) end)
 
     cond do
       length(candidates) == 0 ->
         nil
       length(candidates) == 1 -> 
-        {_base_name, zone, _minx, _maxx, _miny, _maxy} = hd(candidates)
-        zone
+        {zone_name, _geo_object} = hd(candidates)
+        zone_name
       true ->
         lookup_geo(lat, lng, candidates)
           |> simplify_result()
@@ -90,14 +89,19 @@ defmodule WhereTZ do
 
   defp lookup_geo(lat, lng, candidates) do
     candidates
-      |> Enum.filter(fn({fname, _, _, _, _, _}) ->
-        {:ok, file} = File.open("./priv/data/" <> fname, [:read])
-        json = IO.binread(file, :all)
-        File.close(file)
-        data =  Geo.JSON.decode!(Poison.decode!(json))
-        Topo.contains?(hd(data.geometries), %Geo.Point{ coordinates: {lng, lat}})
+      |> Enum.filter(fn({_zone_name, geo_object}) ->
+        Topo.contains?(geo_object, %Geo.Point{ coordinates: {lng, lat}})
       end)
-      |> Enum.map(fn({_base_name, zone, _minx, _maxx, _miny, _maxy}) -> zone end)
+      |> Enum.map(fn({zone_name, _geo_object}) -> zone_name end)
+
+      # |> Enum.filter(fn({fname, _, _, _, _, _}) ->
+      #   {:ok, file} = File.open("./priv/data/" <> fname, [:read])
+      #   json = IO.binread(file, :all)
+      #   File.close(file)
+      #   data =  Geo.JSON.decode!(Poison.decode!(json))
+      #   Topo.contains?(hd(data.geometries), %Geo.Point{ coordinates: {lng, lat}})
+      # end)
+      # |> Enum.map(fn({_base_name, zone, _minx, _maxx, _miny, _maxy}) -> zone end)
   end
 
 end

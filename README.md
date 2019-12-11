@@ -74,7 +74,7 @@ point = %Geo.Point{ coordinates: {55.75, 37.616667}}
 {:ok, file} = File.open("./priv/data/Europe-Moscow__26.4402__69.9572__41.1851__82.0586.geojson", [:read])
 json1 = IO.binread(file, :all)
 File.close(file)
-data1 = Jason.decode!(json1) |> Geo.JSON.decode!()
+data1 = Jason.decode!(json) |> Geo.JSON.decode!()
 
 
 paris
@@ -113,6 +113,13 @@ File.close(file)
 
 data1 = Jason.decode!(json1) |> Geo.JSON.decode!()
 data2 = Jason.decode!(json2) |> Geo.JSON.decode!()
+
+
+lat = 50.004444
+lng = 36.231389
+where = :ets.fun2ms(fn({:geo, zone_name, minx, maxx, miny, maxy, geo_object}) when lng>=minx and lng<=maxx and lat>=miny and lat<=maxy -> zone_name end)
+
+:mnesia.transaction(fn() -> :mnesia.select(:geo, where) end)
 ```
 
 

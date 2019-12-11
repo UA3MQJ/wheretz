@@ -19,8 +19,8 @@ defmodule WheretzTest do
   end
 
   test "when no timezone: middle of the ocean" do
-    assert WhereTZ.get(35.024992, -39.481339) == nil
-    assert WhereTZ.lookup(35.024992, -39.481339) == nil
+    assert WhereTZ.get(35.024992, -39.481339) == Timex.Timezone.get("Etc/GMT+3")
+    assert WhereTZ.lookup(35.024992, -39.481339) == "Etc/GMT+3"
   end
 
   test "when ambiguous timezones" do

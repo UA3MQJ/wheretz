@@ -28,7 +28,8 @@ defmodule WhereTZ.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger]
+      mod: {WhereTZ.Application, []},
+      extra_applications: [:logger, :mnesia]
     ]
   end
 
@@ -36,6 +37,7 @@ defmodule WhereTZ.MixProject do
   defp deps do
     [
       {:poison, "~> 4.0"},
+      {:jason, "~> 1.1"},
       {:timex, "~> 3.6"},
       {:geo, "~> 3.3"},
       # {:topo, path: "../topo"}, # for debug
@@ -43,7 +45,7 @@ defmodule WhereTZ.MixProject do
       # {:gnuplot, git: "git@github.com:devstopfix/gnuplot-elixir.git"}, # for debug
       {:excoveralls, "~> 0.12.1", only: :test},
       # Docs dependencies
-      {:ex_doc, "~> 0.20", only: :docs},
+      {:ex_doc, "~> 0.20", only: :dev, runtime: false},
       {:inch_ex, "~> 0.2", only: :docs},
     ]
   end
