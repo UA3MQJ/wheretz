@@ -14,15 +14,15 @@ defmodule Mix.Tasks.DownloadData do
   end
 
   def download_database() do
-    # :ssl.start() 
-    # :inets.start()
+    :ssl.start() 
+    :inets.start()
     
 
-    # link = 'https://github.com/evansiroky/timezone-boundary-builder/releases/download/2019b/timezones-with-oceans.geojson.zip'
-    # Logger.info "Download #{inspect link}"
-    # {:ok, :saved_to_file} = :httpc.request(:get, {link, []}, [], [stream: 'priv/data/timezones-with-oceans.geojson.zip'])
-    # Logger.info "Unzip"
-    # :zip.unzip('priv/data/timezones-with-oceans.geojson.zip',  [{:cwd, 'priv/data/'}])
+    link = 'https://github.com/evansiroky/timezone-boundary-builder/releases/download/2019b/timezones-with-oceans.geojson.zip'
+    Logger.info "Download #{inspect link}"
+    {:ok, :saved_to_file} = :httpc.request(:get, {link, []}, [], [stream: 'priv/data/timezones-with-oceans.geojson.zip'])
+    Logger.info "Unzip"
+    :zip.unzip('priv/data/timezones-with-oceans.geojson.zip',  [{:cwd, 'priv/data/'}])
 
     {:ok, file} = File.open("priv/data/dist/combined-with-oceans.json", [:read])
     json = IO.binread(file, :all)
