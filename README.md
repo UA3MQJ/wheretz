@@ -36,6 +36,12 @@ def deps do
 end
 ```
 
+Before the first start, you need to download the geo database.
+
+```elixir
+mix download_data
+```
+
 usage
 
 ```elixir
@@ -47,79 +53,27 @@ iex(2)> WhereTZ.lookup(50.004444, 36.231389)
 
 ## How it works
 
-1. Latest version of [timezone-boundary-builder](https://github.com/evansiroky/timezone-boundary-builder) dataset is converted into ~400 `data/*.geojson` files;
-2. Each of those files corresponds to one timezone; filename contains
-  timezone name and _bounding box_ (min and max latitude and longitude);
+1. Latest version of [timezone-boundary-builder](https://github.com/evansiroky/timezone-boundary-builder) dataset is converted into mnesia table (125Mb);
+2. For each time zone, store timezone name, geo polygon and calculate _bounding box_ (min and max latitude and longitude);
 3. On each lookup `WhereTZ` first checks provided coordinates by bounding
-  boxes, and if only one bbox (extracted from filename) corresponds to
-  them, returns timezone name immediately;
-4. If there's several intersecting bounding boxes, `WhereTZ` reads only
-  relevant timezone files (which are not very large) and checks which
+  boxes, and if only one bbox, corresponds to them, returns timezone name immediately;
+4. If there's several intersecting bounding boxes, `WhereTZ` checks which
   polygon actually contains the point.
 
 ## Known problems
 
-* On "bounding box only" check, some points deeply in sea (and actually
-  belonging to no timezone polygon) can be wrongly guessed as belonging
-  to some timezone;
+* ?
 
-# Рецепты
+## Author
 
-```elixir
-Moscow
-WhereTZ.lookup(55.75, 37.616667) 
+Alexey Bolshakov
 
-point = %Geo.Point{ coordinates: {55.75, 37.616667}}
+## Thanks to
 
-{:ok, file} = File.open("./priv/data/Europe-Moscow__26.4402__69.9572__41.1851__82.0586.geojson", [:read])
-json1 = IO.binread(file, :all)
-File.close(file)
-data1 = Jason.decode!(json) |> Geo.JSON.decode!()
+[Victor Shepelev](http://zverok.github.io/)
 
+## License
 
-paris
-WhereTZ.lookup(43.6605555555556, 7.2175)
-point = %Geo.Point{ coordinates: {43.6605555555556, 7.2175}}
+Data license is [ODbL](https://opendatacommons.org/licenses/odbl/).
 
-Kharkiv
-WhereTZ.lookup(50.004444, 36.231389) 
-
-{:ok, file} = File.open("./priv/data/Europe-Kiev__22.6408__40.2276__45.0532__52.3791.geojson", [:read])
-json1 = IO.binread(file, :all)
-File.close(file)
-
-{:ok, file} = File.open("./priv/data/Europe-Moscow__26.4402__69.9572__41.1851__82.0586.geojson", [:read])
-json2 = IO.binread(file, :all)
-File.close(file)
-
-data1 = Jason.decode!(json1) |> Geo.JSON.decode!()
-data2 = Jason.decode!(json2) |> Geo.JSON.decode!()
-
-point = %Geo.Point{ coordinates: {36.231389, 50.004444}}
-
-
-
-
-WhereTZ.lookup(50.28337, -107.80135)
-point = %Geo.Point{ coordinates: {-107.80135, 50.28337}}
-
-{:ok, file} = File.open("./priv/data/America-Regina__-110.0064__-101.3619__48.9988__59.9998.geojson", [:read])
-json1 = IO.binread(file, :all)
-File.close(file)
-
-{:ok, file} = File.open("./priv/data/America-Swift_Current__-107.8381__-107.7563__50.2588__50.3246.geojson", [:read])
-json2 = IO.binread(file, :all)
-File.close(file)
-
-data1 = Jason.decode!(json1) |> Geo.JSON.decode!()
-data2 = Jason.decode!(json2) |> Geo.JSON.decode!()
-
-
-lat = 50.004444
-lng = 36.231389
-where = :ets.fun2ms(fn({:geo, zone_name, minx, maxx, miny, maxy, geo_object}) when lng>=minx and lng<=maxx and lat>=miny and lat<=maxy -> zone_name end)
-
-:mnesia.transaction(fn() -> :mnesia.select(:geo, where) end)
-```
-
-
+Code license is usual MIT.

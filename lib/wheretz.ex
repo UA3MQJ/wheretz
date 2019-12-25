@@ -93,15 +93,6 @@ defmodule WhereTZ do
         Topo.contains?(geo_object, %Geo.Point{ coordinates: {lng, lat}})
       end)
       |> Enum.map(fn({zone_name, _geo_object}) -> zone_name end)
-
-      # |> Enum.filter(fn({fname, _, _, _, _, _}) ->
-      #   {:ok, file} = File.open("./priv/data/" <> fname, [:read])
-      #   json = IO.binread(file, :all)
-      #   File.close(file)
-      #   data =  Geo.JSON.decode!(Poison.decode!(json))
-      #   Topo.contains?(hd(data.geometries), %Geo.Point{ coordinates: {lng, lat}})
-      # end)
-      # |> Enum.map(fn({_base_name, zone, _minx, _maxx, _miny, _maxy}) -> zone end)
   end
 
 end
