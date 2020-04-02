@@ -15,20 +15,21 @@ defmodule Mix.Tasks.DownloadData do
 
   def download_database() do
     Application.ensure_all_started :httpoison
-    File.mkdir("./priv")
-    File.mkdir("./priv/data")
+    priv_data_path = Application.app_dir(:wheretz, "priv/data")
+    Logger.info "priv_data_path =#{inspect priv_data_path}"
+    File.mkdir(priv_data_path)
     link = "http://github.com/evansiroky/timezone-boundary-builder/releases/download/2019b/timezones-with-oceans.geojson.zip"
 
     Logger.info "Download #{inspect link} ..."
     %HTTPoison.Response{body: body} = HTTPoison.get!(link, [], [follow_redirect: true])
     Logger.info "Save to file"
-    File.write!("./priv/data/timezones-with-oceans.geojson.zip", body)
+    File.write!(priv_data_path <> "/timezones-with-oceans.geojson.zip", body)
 
     Logger.info "Unzip ..."
-    :zip.unzip('./priv/data/timezones-with-oceans.geojson.zip',  [{:cwd, './priv/data/'}])
+    :zip.unzip(String.to_charlist(priv_data_path) ++ '/timezones-with-oceans.geojson.zip',  [{:cwd, './priv/data/'}])
 
     Logger.info "Read json ..."
-    {:ok, file} = File.open("./priv/data/dist/combined-with-oceans.json", [:read])
+    {:ok, file} = File.open(priv_data_path <> "/dist/combined-with-oceans.json", [:read])
     json = IO.binread(file, :all)
     File.close(file)
 
@@ -45,7 +46,10 @@ defmodule Mix.Tasks.DownloadData do
   end
 
   def create_database() do
-    :mnesia.stop()
+    priv_path = Application.app_dir(:wheretz, "priv/mnesia_db")
+    Logger.info "WhereTZ mnesia db path #{inspect priv_path}"
+    :application.set_env(:mnesia, :dir, String.to_charlist(priv_path))
+
     :mnesia.create_schema([node()])
     :mnesia.start()
     :mnesia.create_table(:geo,[{:disc_copies,[node()]},

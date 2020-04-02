@@ -8,6 +8,11 @@ defmodule WhereTZ.Application do
 
   def start(_type, _args) do
     Logger.info "WhereTZ Start"
+    priv_path = Application.app_dir(:wheretz, "priv/mnesia_db")
+    Logger.info "WhereTZ mnesia db path #{inspect priv_path}"
+    :application.set_env(:mnesia, :dir, String.to_charlist(priv_path))
+    Logger.info "WhereTZ start mnesia"
+    Application.start(:mnesia)
     Logger.info "WhereTZ wait mnesia tables"
     local_tables = :mnesia.system_info(:local_tables)
 
