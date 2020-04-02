@@ -13,11 +13,30 @@ defmodule Mix.Tasks.DownloadData do
     download_database()
   end
 
+  def create_database() do
+    priv_mnesia_path = Application.app_dir(:wheretz, "priv/mnesia_db")
+    File.mkdir(priv_mnesia_path)
+    Logger.info "WhereTZ mnesia db path #{inspect priv_mnesia_path}"
+    :application.set_env(:mnesia, :dir, String.to_charlist(priv_mnesia_path))
+
+    :mnesia.create_schema([node()])
+    :mnesia.start()
+    :mnesia.create_table(:geo,[{:disc_copies,[node()]},
+                               {:attributes,[:zone_name, :minx, :maxx, :miny, :maxy, :geo_object]}])
+
+    :mnesia.add_table_index(:geo, :minx)
+    :mnesia.add_table_index(:geo, :maxx)
+    :mnesia.add_table_index(:geo, :miny)
+    :mnesia.add_table_index(:geo, :maxy)
+  end
+
+
   def download_database() do
     Application.ensure_all_started :httpoison
     priv_data_path = Application.app_dir(:wheretz, "priv/data")
     Logger.info "priv_data_path =#{inspect priv_data_path}"
     File.mkdir(priv_data_path)
+
     link = "http://github.com/evansiroky/timezone-boundary-builder/releases/download/2019b/timezones-with-oceans.geojson.zip"
 
     Logger.info "Download #{inspect link} ..."
@@ -26,7 +45,7 @@ defmodule Mix.Tasks.DownloadData do
     File.write!(priv_data_path <> "/timezones-with-oceans.geojson.zip", body)
 
     Logger.info "Unzip ..."
-    :zip.unzip(String.to_charlist(priv_data_path) ++ '/timezones-with-oceans.geojson.zip',  [{:cwd, './priv/data/'}])
+    :zip.unzip(String.to_charlist(priv_data_path) ++ '/timezones-with-oceans.geojson.zip',  [{:cwd, String.to_charlist(priv_data_path)}])
 
     Logger.info "Read json ..."
     {:ok, file} = File.open(priv_data_path <> "/dist/combined-with-oceans.json", [:read])
@@ -43,22 +62,6 @@ defmodule Mix.Tasks.DownloadData do
 
     :mnesia.sync_log()
     :mnesia.stop()
-  end
-
-  def create_database() do
-    priv_path = Application.app_dir(:wheretz, "priv/mnesia_db")
-    Logger.info "WhereTZ mnesia db path #{inspect priv_path}"
-    :application.set_env(:mnesia, :dir, String.to_charlist(priv_path))
-
-    :mnesia.create_schema([node()])
-    :mnesia.start()
-    :mnesia.create_table(:geo,[{:disc_copies,[node()]},
-                               {:attributes,[:zone_name, :minx, :maxx, :miny, :maxy, :geo_object]}])
-
-    :mnesia.add_table_index(:geo, :minx)
-    :mnesia.add_table_index(:geo, :maxx)
-    :mnesia.add_table_index(:geo, :miny)
-    :mnesia.add_table_index(:geo, :maxy)
   end
 
   def parse_item(item) do
