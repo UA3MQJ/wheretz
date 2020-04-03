@@ -19,7 +19,7 @@ defmodule Mix.Tasks.DownloadData do
     Logger.info "WhereTZ mnesia db path #{inspect priv_mnesia_path}"
     :application.set_env(:mnesia, :dir, String.to_charlist(priv_mnesia_path))
 
-    :ok = :mnesia.create_schema([node()])
+    :mnesia.create_schema([node()])
     :ok = :mnesia.start()
 
     {:atomic, :ok} = :mnesia.create_table(:geo,[{:disc_copies,[node()]},
