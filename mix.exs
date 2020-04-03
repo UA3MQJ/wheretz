@@ -5,7 +5,7 @@ defmodule WhereTZ.MixProject do
     [
       app: :wheretz,
       description: "Time zone by geo coordinates lookup",
-      version: "0.1.6",
+      version: "0.1.7",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
       test_coverage: [tool: ExCoveralls],
@@ -29,7 +29,7 @@ defmodule WhereTZ.MixProject do
   def application do
     [
       mod: {WhereTZ.Application, []},
-      extra_applications: [:logger]
+      extra_applications: [:logger, :mnesia]
     ]
   end
 
