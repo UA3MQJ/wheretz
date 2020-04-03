@@ -15,9 +15,9 @@ defmodule Mix.Tasks.DownloadData do
 
   def create_database() do
     :mnesia.create_schema([node()])
-    :ok = :mnesia.start()
+    :mnesia.start()
 
-    {:atomic, :ok} = :mnesia.create_table(:geo,[{:disc_copies,[node()]},
+    :mnesia.create_table(:geo,[{:disc_copies,[node()]},
                                {:attributes,[:zone_name, :minx, :maxx, :miny, :maxy, :geo_object]}])
 
     :mnesia.add_table_index(:geo, :minx)
