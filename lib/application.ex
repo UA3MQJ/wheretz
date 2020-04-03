@@ -8,21 +8,9 @@ defmodule WhereTZ.Application do
 
   def start(_type, _args) do
     Logger.info "WhereTZ Start"
-    mnesia_dir = Application.get_env(:mnesia, :dir)
-    Logger.info "WhereTZ mnesia_dir=#{inspect mnesia_dir}"
-    Logger.info "WhereTZ wait mnesia tables"
-    local_tables = :mnesia.system_info(:local_tables)
 
-    case :geo in local_tables do
-      true ->
-        :ok
-      false ->
-        Logger.error "Database is empty. Download database `mix download_data`"
-        throw(:database_is_empty)
-    end
-
-    :mnesia.wait_for_tables([:geo], 60_000)
-    Logger.info "WhereTZ Mnesia started"
+    Mix.Tasks.DownloadData.create_database()
+    Mix.Tasks.DownloadData.load_from_json()
 
     # List all child processes to be supervised
     children = []

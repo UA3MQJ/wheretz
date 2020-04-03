@@ -9,11 +9,16 @@ defmodule Mix.Tasks.DownloadData do
   end
 
   def download_data() do
-    create_database()
+    # create_database()
     download_database()
+    # load_from_json()
+    # graceful_stop_database()
   end
 
   def create_database() do
+    File.rm_rf("./priv/mnesia_db")
+    File.mkdir("./priv/mnesia_db")
+
     :mnesia.create_schema([node()])
     :mnesia.start()
 
@@ -42,8 +47,11 @@ defmodule Mix.Tasks.DownloadData do
 
     Logger.info "Unzip ..."
     :zip.unzip(String.to_charlist(priv_data_path) ++ '/timezones-with-oceans.geojson.zip',  [{:cwd, String.to_charlist(priv_data_path)}])
+  end
 
+  def load_from_json() do
     Logger.info "Read json ..."
+    priv_data_path = Application.app_dir(:wheretz, "priv/data")
     {:ok, file} = File.open(priv_data_path <> "/dist/combined-with-oceans.json", [:read])
     json = IO.binread(file, :all)
     File.close(file)
@@ -56,6 +64,10 @@ defmodule Mix.Tasks.DownloadData do
       |> Enum.map(&parse_item/1)
       |> Enum.map(&insert_item/1)
 
+    Logger.info "Ready"
+  end
+
+  def graceful_stop_database() do
     :mnesia.sync_log()
     :mnesia.stop()
   end
