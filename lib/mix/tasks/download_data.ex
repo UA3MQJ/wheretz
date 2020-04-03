@@ -15,13 +15,14 @@ defmodule Mix.Tasks.DownloadData do
 
   def create_database() do
     priv_mnesia_path = Application.app_dir(:wheretz, "priv/mnesia_db")
-    File.mkdir(priv_mnesia_path)
+    # File.mkdir(priv_mnesia_path)
     Logger.info "WhereTZ mnesia db path #{inspect priv_mnesia_path}"
     :application.set_env(:mnesia, :dir, String.to_charlist(priv_mnesia_path))
 
-    :mnesia.create_schema([node()])
-    :mnesia.start()
-    :mnesia.create_table(:geo,[{:disc_copies,[node()]},
+    :ok = :mnesia.create_schema([node()])
+    :ok = :mnesia.start()
+
+    {:atomic, :ok} = :mnesia.create_table(:geo,[{:disc_copies,[node()]},
                                {:attributes,[:zone_name, :minx, :maxx, :miny, :maxy, :geo_object]}])
 
     :mnesia.add_table_index(:geo, :minx)
