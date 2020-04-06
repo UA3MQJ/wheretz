@@ -5,7 +5,7 @@ defmodule WhereTZ.MixProject do
     [
       app: :wheretz,
       description: "Time zone by geo coordinates lookup",
-      version: "0.1.13",
+      version: "0.1.14",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
       test_coverage: [tool: ExCoveralls],
@@ -55,7 +55,7 @@ defmodule WhereTZ.MixProject do
   defp aliases do
     [
       compile: ["compile"],
-      test: ["test"]
+      test: ["download_data", "test"]
     ]
   end
 

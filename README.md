@@ -42,6 +42,13 @@ Before the first start, you need to download the geo database.
 mix download_data
 ```
 
+set config
+
+```elixir
+config :mnesia,
+  dir: './priv/mnesia_db' # use single quotes here !!!
+```
+
 usage
 
 ```elixir
