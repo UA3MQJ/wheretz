@@ -16,13 +16,10 @@ defmodule Mix.Tasks.DownloadData do
   end
 
   def create_database() do
-    File.rm_rf("./priv/mnesia_db")
-    File.mkdir("./priv/mnesia_db")
-
-    :mnesia.create_schema([node()])
+    :mnesia.create_schema([])
     :mnesia.start()
 
-    :mnesia.create_table(:geo,[{:disc_copies,[node()]},
+    :mnesia.create_table(:geo,[{:ram_copies,[node()]},
                                {:attributes,[:zone_name, :minx, :maxx, :miny, :maxy, :geo_object]}])
 
     :mnesia.add_table_index(:geo, :minx)
