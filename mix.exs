@@ -5,7 +5,7 @@ defmodule WhereTZ.MixProject do
     [
       app: :wheretz,
       description: "Time zone by geo coordinates lookup",
-      version: "0.1.15",
+      version: "0.1.16",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
       test_coverage: [tool: ExCoveralls],
@@ -38,16 +38,16 @@ defmodule WhereTZ.MixProject do
   defp deps do
     [
       {:poison, "~> 4.0"},
-      {:jason, "~> 1.1"},
+      {:jason, "~> 1.2"},
       {:timex, "~> 3.6"},
       {:geo, "~> 3.3"},
       # {:topo, path: "../topo"}, # for debug
       {:topo, "~> 0.4.0"},
       # {:gnuplot, git: "git@github.com:devstopfix/gnuplot-elixir.git"}, # for debug
-      {:excoveralls, "~> 0.12.1", only: :test},
+      {:excoveralls, "~> 0.12.3", only: :test},
       # Docs dependencies
-      {:ex_doc, "~> 0.20", only: :dev, runtime: false},
-      {:inch_ex, "~> 0.2", only: :docs},
+      {:ex_doc, "~> 0.21.3", only: :dev, runtime: false},
+      {:inch_ex, "~> 2.0", only: :docs},
       {:httpoison, "~> 1.6"},
     ]
   end
