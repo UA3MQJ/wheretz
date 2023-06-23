@@ -7,10 +7,10 @@ defmodule WhereTZ.Application do
   require Logger
 
   def start(_type, _args) do
-    Logger.info "WhereTZ Start"
+    Logger.info("WhereTZ Start")
 
-    Mix.Tasks.DownloadData.create_database()
-    Mix.Tasks.DownloadData.load_from_json()
+    :mnesia.create_schema([])
+    :mnesia.start()
 
     # List all child processes to be supervised
     children = []
