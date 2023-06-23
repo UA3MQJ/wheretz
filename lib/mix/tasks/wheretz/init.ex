@@ -67,8 +67,6 @@ defmodule Mix.Tasks.WhereTz.Init do
 
   def graceful_stop_database() do
     :mnesia.sync_log()
-    |> dbg
-
     :mnesia.stop()
   end
 
