@@ -55,7 +55,7 @@ defmodule Mix.Tasks.WhereTz.Init do
     Logger.info("Parsing & inserting json ...")
     priv_data_path = Application.app_dir(:wheretz, "priv/data")
 
-    File.stream!(priv_data_path <> "/dist/combined-with-oceans.json", [], 5120)
+    File.stream!(priv_data_path <> "/combined-with-oceans.json", [], 5120)
     |> Jaxon.Stream.from_enumerable()
     |> Jaxon.Stream.query([:root, "features", :all])
     |> Stream.map(&parse_item/1)
