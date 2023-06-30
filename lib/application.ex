@@ -8,9 +8,9 @@ defmodule WhereTZ.Application do
 
   def start(_type, _args) do
     Logger.info("WhereTZ Start")
-
-    :mnesia.create_schema([])
-    :mnesia.start()
+    # :ok = :mnesia.create_schema([])
+    :ok = :mnesia.start()
+    WhereTZ.Init.run()
 
     # List all child processes to be supervised
     children = []
@@ -18,6 +18,11 @@ defmodule WhereTZ.Application do
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Messenger.Supervisor]
+
+    Logger.info("WhereTZ Started")
     Supervisor.start_link(children, opts)
   end
 end
+
+
+# WhereTZ.get(50.25, -107.80135)
