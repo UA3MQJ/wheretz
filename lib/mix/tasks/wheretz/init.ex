@@ -16,12 +16,10 @@ defmodule Mix.Tasks.WhereTz.Init do
 
   def create_database() do
     Logger.info("Setting up database")
-    :mnesia.create_schema([])
-    :mnesia.start()
 
-    :mnesia.create_table(:geo, [
-      {:ram_copies, [node()]},
-      {:attributes, [:zone_name, :minx, :maxx, :miny, :maxy, :geo_object]}
+    {:atomic, :ok} = :mnesia.create_table(:geo, [
+      disc_copies: [node()],
+      attributes: [:zone_name, :minx, :maxx, :miny, :maxy, :geo_object]
     ])
 
     :mnesia.add_table_index(:geo, :minx)

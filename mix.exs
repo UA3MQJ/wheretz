@@ -35,8 +35,7 @@ defmodule WhereTZ.MixProject do
   def application do
     [
       mod: {WhereTZ.Application, []},
-      extra_applications: [:logger],
-      included_applications: [:mnesia]
+      extra_applications: [:logger, :runtime_tools, :mnesia]
     ]
   end
 

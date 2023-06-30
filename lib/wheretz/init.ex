@@ -2,16 +2,26 @@ defmodule WhereTZ.Init do
   require Logger
 
   def run() do
-    create_database()
+    :mnesia.stop()
+    :mnesia.create_schema([node()])
+    :ok = :mnesia.start()
+
+    already_exists = :geo in :mnesia.system_info(:local_tables)
+
+    if !already_exists do
+      create_database()
+      download_and_parse_data()
+    end
   end
 
   def create_database() do
     Logger.info("Setting up database")
 
-    {:atomic, :ok} = :mnesia.create_table(:geo, [
-      attributes: [:zone_name, :minx, :maxx, :miny, :maxy, :geo_object],
-      disc_copies: [node()]
-    ])
+    {:atomic, :ok} =
+      :mnesia.create_table(:geo,
+        attributes: [:zone_name, :minx, :maxx, :miny, :maxy, :geo_object],
+        disc_only_copies: [node()]
+      )
 
     :mnesia.add_table_index(:geo, :minx)
     :mnesia.add_table_index(:geo, :maxx)
@@ -42,7 +52,7 @@ defmodule WhereTZ.Init do
 
     Logger.info("Unzip ...")
 
-    :zip.unzip(String.to_charlist(priv_data_path) ++ '/timezones-with-oceans.geojson.zip', [
+    :zip.unzip(String.to_charlist(priv_data_path) ++ ~c"/timezones-with-oceans.geojson.zip", [
       {:cwd, String.to_charlist(priv_data_path)}
     ])
   end
@@ -51,7 +61,7 @@ defmodule WhereTZ.Init do
     Logger.info("Parsing & inserting json ...")
     priv_data_path = Application.app_dir(:wheretz, "priv/data")
 
-    File.stream!(priv_data_path <> "/combined-with-oceans.json", [], 5120)
+    File.stream!(priv_data_path <> "/combined-with-oceans.json", [], 20000)
     |> Jaxon.Stream.from_enumerable()
     |> Jaxon.Stream.query([:root, "features", :all])
     |> Stream.map(&parse_item/1)
