@@ -36,10 +36,10 @@ def deps do
 end
 ```
 
-Before the first start, you need to download the geo database.
+Before the first start, you need to download the geo and initializse the database.
 
 ```elixir
-mix download_data
+mix where_tz.init 
 ```
 
 usage

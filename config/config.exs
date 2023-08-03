@@ -1,3 +1,3 @@
-use Mix.Config
+import Config
 
 config :mnesia, schema_location: :ram

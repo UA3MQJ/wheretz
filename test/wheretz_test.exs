@@ -29,5 +29,4 @@ defmodule WheretzTest do
     assert WhereTZ.get(50.25, -107.80135) == Timex.Timezone.get("America/Regina")
     assert WhereTZ.lookup(50.25, -107.80135) == "America/Regina"
   end
-
 end

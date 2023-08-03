@@ -1,5 +1,5 @@
 {
     "skip_files": [
-      "lib/mix/tasks/download_data.ex"
+      "lib/mix/tasks/wheretz/init.ex"
     ]
   }

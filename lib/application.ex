@@ -7,10 +7,7 @@ defmodule WhereTZ.Application do
   require Logger
 
   def start(_type, _args) do
-    Logger.info "WhereTZ Start"
-
-    Mix.Tasks.DownloadData.create_database()
-    Mix.Tasks.DownloadData.load_from_json()
+    WhereTZ.Init.run()
 
     # List all child processes to be supervised
     children = []
@@ -18,6 +15,7 @@ defmodule WhereTZ.Application do
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Messenger.Supervisor]
+
     Supervisor.start_link(children, opts)
   end
 end

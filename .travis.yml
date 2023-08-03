@@ -18,7 +18,7 @@ before_script:
   - mix local.rebar --force
   - mix deps.get --only test
   - mix compile
-  - mix download_data
+  - mix where_tz.init
 
 after_script:
   - MIX_ENV=test mix coveralls.travis
