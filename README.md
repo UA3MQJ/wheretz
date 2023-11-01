@@ -65,7 +65,7 @@ iex(2)> WhereTZ.lookup(50.004444, 36.231389)
 
 ## Known problems
 
-* ?
+* Not work with new format of geo data 2023
 
 ## Author
 

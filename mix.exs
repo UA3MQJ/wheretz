@@ -37,16 +37,16 @@ defmodule WhereTZ.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:poison, "~> 4.0"},
-      {:jason, "~> 1.2"},
-      {:timex, "~> 3.6"},
-      {:geo, "~> 3.3"},
+      {:poison, "~> 5.0"},
+      {:jason, "~> 1.4"},
+      {:timex, "~> 3.7"},
+      {:geo, "~> 3.6"},
       # {:topo, path: "../topo"}, # for debug
-      {:topo, "~> 0.4.0"},
+      {:topo, "~> 1.0"},
       # {:gnuplot, git: "git@github.com:devstopfix/gnuplot-elixir.git"}, # for debug
-      {:excoveralls, "~> 0.12.3", only: :test},
+      {:excoveralls, "~> 0.18.0", only: :test},
       # Docs dependencies
-      {:ex_doc, "~> 0.21.3", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.30.9", only: :dev, runtime: false},
       {:inch_ex, "~> 2.0", only: :docs},
       {:httpoison, "~> 2.1"},
     ]
