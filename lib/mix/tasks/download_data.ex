@@ -35,7 +35,7 @@ defmodule Mix.Tasks.DownloadData do
     Logger.info "priv_data_path =#{inspect priv_data_path}"
     File.mkdir(priv_data_path)
 
-    link = "http://github.com/evansiroky/timezone-boundary-builder/releases/download/2019b/timezones-with-oceans.geojson.zip"
+    link = "https://github.com/evansiroky/timezone-boundary-builder/archive/refs/tags/2023b.zip"
 
     Logger.info "Download #{inspect link} ..."
     %HTTPoison.Response{body: body} = HTTPoison.get!(link, [], [follow_redirect: true])
@@ -44,24 +44,28 @@ defmodule Mix.Tasks.DownloadData do
 
     Logger.info "Unzip ..."
     :zip.unzip(String.to_charlist(priv_data_path) ++ '/timezones-with-oceans.geojson.zip',  [{:cwd, String.to_charlist(priv_data_path)}])
+
+    Logger.info "Copy ..."
+    File.cp("#{priv_data_path}" <> "/timezone-boundary-builder-2023b/timezones.json", "#{priv_data_path}" <> "/timezones.json")
   end
 
   def load_from_json() do
-    Logger.info "Read json ..."
     priv_data_path = Application.app_dir(:wheretz, "priv/data")
-    {:ok, file} = File.open(priv_data_path <> "/dist/combined-with-oceans.json", [:read])
+    Logger.info "Read json ..." <> priv_data_path <> "/timezones.json"
+    {:ok, file} = File.open(priv_data_path <> "/timezones.json", [:read])
     json = IO.binread(file, :all)
     File.close(file)
 
     Logger.info "Decode json ..."
     data = Jason.decode!(json)
 
-    Logger.info "Parse and insert ..."
-    data["features"]
-      |> Enum.map(&parse_item/1)
-      |> Enum.map(&insert_item/1)
 
-    Logger.info "Ready"
+    Logger.info "Parse and insert ..."
+    data
+      # |> Enum.map(&parse_item/1)
+    #   |> Enum.map(&insert_item/1)
+
+    # Logger.info "Ready"
   end
 
   def graceful_stop_database() do
@@ -86,7 +90,7 @@ defmodule Mix.Tasks.DownloadData do
     do: bounding_box(geometry, :polygon)
   def bounding_box(%{"type" => "MultiPolygon"} = geometry),
     do: bounding_box(geometry, :multi_polygon)
-  
+
   def bounding_box(geometry, :polygon) do
     li = geometry["coordinates"]
       |> Enum.reduce([], &(&1 ++ &2))

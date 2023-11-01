@@ -48,7 +48,7 @@ defmodule WhereTZ.MixProject do
       # Docs dependencies
       {:ex_doc, "~> 0.21.3", only: :dev, runtime: false},
       {:inch_ex, "~> 2.0", only: :docs},
-      {:httpoison, "~> 1.6"},
+      {:httpoison, "~> 2.1"},
     ]
   end
 

@@ -4,6 +4,10 @@
 [![Coverage Status](https://coveralls.io/repos/github/UA3MQJ/wheretz/badge.svg?branch=master)](https://coveralls.io/github/UA3MQJ/wheretz?branch=master)
 [![Inline docs](http://inch-ci.org/github/UA3MQJ/wheretz.svg)](http://inch-ci.org/github/UA3MQJ/wheretz)
 
+**WARNING**
+
+Not work in 2023 :(
+
 **WhereTZ** is elixir version of Ruby gem for lookup of timezone by georgraphic coordinates.
 
 https://github.com/zverok/wheretz
