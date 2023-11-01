@@ -1,6 +1,5 @@
 # WhereTZ: timezone lookup
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Build Status](https://travis-ci.org/UA3MQJ/wheretz.svg?branch=master)](https://travis-ci.org/UA3MQJ/wheretz?branch=master)
 [![Hex.pm Version](http://img.shields.io/hexpm/v/wheretz.svg?style=flat)](https://hex.pm/packages/wheretz)
 [![Coverage Status](https://coveralls.io/repos/github/UA3MQJ/wheretz/badge.svg?branch=master)](https://coveralls.io/github/UA3MQJ/wheretz?branch=master)
 [![Inline docs](http://inch-ci.org/github/UA3MQJ/wheretz.svg)](http://inch-ci.org/github/UA3MQJ/wheretz)
