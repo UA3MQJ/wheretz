@@ -42,7 +42,7 @@ defmodule WhereTZ.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:timex, "~> 3.6"},
+      {:timex, "~> 3.7"},
       {:geo, "~> 3.3"},
       {:httpoison, "~> 2.0"},
       {:jaxon, "~> 2.0"},
@@ -59,7 +59,7 @@ defmodule WhereTZ.MixProject do
   defp aliases do
     [
       compile: ["compile"],
-      test: ["where_tz.init", "test"]
+      test: ["test"]
     ]
   end
 
