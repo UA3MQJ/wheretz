@@ -47,7 +47,7 @@ usage
 ```elixir
 iex(1)> WhereTZ.get(50.004444, 36.231389)   
 #<TimezoneInfo(Europe/Kiev - EET (+02:00:00))>
-iex(2)> WhereTZ.lookup(50.004444, 36.231389)  
+iex(2)> WhereTZ.lookup(50.004444, 36.231389)
 "Europe/Kiev"
 ```
 
